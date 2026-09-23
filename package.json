@@ -1,0 +1,36 @@
+{
+  "name": "microservic-project",
+  "version": "1.0.0",
+  "description": "Scalable Backend System using Microservices Architecture with Node.js and SQLite",
+  "main": "start-all.js",
+  "scripts": {
+    "start": "node start-all.js",
+    "start:gateway": "node services/api-gateway/server.js",
+    "start:users": "node services/user-service/server.js",
+    "start:products": "node services/product-service/server.js",
+    "start:orders": "node services/order-service/server.js",
+    "start:payments": "node services/payment-service/server.js",
+    "start:notifications": "node services/notification-service/server.js",
+    "test": "node tests/run-all-tests.js"
+  },
+  "keywords": [
+    "microservices",
+    "nodejs",
+    "sqlite",
+    "swagger",
+    "postman",
+    "api-gateway",
+    "ecommerce"
+  ],
+  "author": "Himanshu",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "concurrently": "^9.1.2",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "http-proxy-middleware": "^3.0.3",
+    "morgan": "^1.10.0",
+    "swagger-ui-express": "^5.0.1"
+  }
+}

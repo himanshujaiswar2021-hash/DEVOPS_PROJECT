@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fashion Admin Portal - Product & Microservices Management</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b1120;
+      --card-bg: #1e293b;
+      --card-hover: #24344d;
+      --border: rgba(255, 255, 255, 0.08);
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --accent: #10b981;
+      --accent-warn: #f59e0b;
+      --accent-danger: #ef4444;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-subtle: #64748b;
+      --radius: 12px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background-color: var(--bg); color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; min-height: 100vh; line-height: 1.5; padding-bottom: 3rem; }
+
+    /* Admin Navbar */
+    .admin-navbar {
+      background: #0f172a;
+      border-bottom: 1px solid var(--border);
+      padding: 0.85rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .admin-brand { display: flex; align-items: center; gap: 0.75rem; }
+    .admin-badge { background: #8b5cf6; color: white; font-size: 0.7rem; font-weight: 800; padding: 0.2rem 0.6rem; border-radius: 999px; text-transform: uppercase; }
+    .admin-title { font-size: 1.25rem; font-weight: 800; color: #fff; }
+
+    .nav-links { display: flex; align-items: center; gap: 0.6rem; }
+    .nav-btn {
+      background: #1e293b;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s;
+    }
+    .nav-btn:hover { background: var(--primary); color: white; border-color: var(--primary); }
+    .nav-btn-highlight { background: #f43397; border-color: #f43397; color: white; font-weight: 700; }
+    .nav-btn-highlight:hover { background: #d81f7d; }
+
+    .main-container { max-width: 1360px; margin: 0 auto; padding: 1.75rem 1.5rem; }
+
+    /* Metric Cards Grid */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+    .metric-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .metric-val { font-size: 1.75rem; font-weight: 800; color: #fff; margin-top: 0.2rem; }
+    .metric-label { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
+    .metric-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; background: #0f172a; border: 1px solid var(--border); }
+
+    /* Admin Tabs */
+    .admin-tabs {
+      display: flex;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.75rem;
+      margin-bottom: 1.75rem;
+      flex-wrap: wrap;
+    }
+    .atab {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 0.55rem 1.1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .atab:hover { color: white; border-color: rgba(255,255,255,0.2); }
+    .atab.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+    /* Content Layout */
+    .admin-section { display: none; }
+    .admin-section.active { display: block; }
+
+    /* Add Product Form Card */
+    .form-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .form-card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.25rem;
+    }
+    .form-group { margin-bottom: 1rem; }
+    .form-label { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.35rem; display: block; }
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      background: #090d16;
+      border: 1px solid var(--border);
+      color: white;
+      padding: 0.55rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-family: inherit;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { outline: none; border-color: var(--primary); }
+    .form-textarea { resize: vertical; min-height: 80px; }
+
+    .submit-btn {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      border: none;
+      padding: 0.65rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .submit-btn:hover { background: linear-gradient(135deg, #059669, #047857); transform: translateY(-1px); }
+
+    /* Data Table */
+    .table-container {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow-x: auto;
+    }
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.85rem;
+    }
+    .admin-table th {
+      background: #0f172a;
+      color: var(--text-muted);
+      font-weight: 700;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.9rem 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .admin-table td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      color: var(--text);
+    }
+    .admin-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+    .sku-pill { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; background: #090d16; padding: 0.2rem 0.5rem; border-radius: 4px; color: #38bdf8; }
+    .status-tag { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.72rem; font-weight: 700; }
+    .status-tag-green { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .status-tag-amber { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .status-tag-red { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+
+    .table-actions { display: flex; gap: 0.4rem; }
+    .btn-tbl {
+      background: #090d16;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.35rem 0.7rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-tbl:hover { border-color: var(--primary); color: white; }
+    .btn-tbl-del:hover { border-color: #ef4444; color: #ef4444; }
+
+    /* Modal for Editing */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(6px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      max-width: 500px;
+      width: 90%;
+    }
+
+    /* Toast */
+    #admin-toast {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      background: #1e293b;
+      border: 1px solid var(--border);
+      color: white;
+      padding: 0.75rem 1.25rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      display: none;
+      z-index: 2000;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    }
+  </style>
+</head>
+<body>
+
+  <div id="admin-toast"></div>
+
+  <!-- Navbar -->
+  <nav class="admin-navbar">
+    <div class="admin-brand">
+      <div class="admin-title">Fashion Admin Portal</div>
+      <span class="admin-badge">Management Console</span>
+    </div>
+    <div class="nav-links">
+      <a href="/" class="nav-btn nav-btn-highlight">🛍️ View Fashion Storefront</a>
+      <a href="/api-docs" target="_blank" class="nav-btn">📖 Swagger Docs</a>
+      <button onclick="loadAllAdminData()" class="nav-btn">🔄 Refresh Data</button>
+    </div>
+  </nav>
+
+  <div class="main-container">
+
+    <!-- Metrics Cards -->
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div>
+          <div class="metric-label">Total Catalog Products</div>
+          <div class="metric-val" id="metric-prod-count">...</div>
+        </div>
+        <div class="metric-icon">📦</div>
+      </div>
+      <div class="metric-card">
+        <div>
+          <div class="metric-label">Customer Orders Placed</div>
+          <div class="metric-val" id="metric-order-count">...</div>
+        </div>
+        <div class="metric-icon">🛒</div>
+      </div>
+      <div class="metric-card">
+        <div>
+          <div class="metric-label">Registered Customers</div>
+          <div class="metric-val" id="metric-user-count">...</div>
+        </div>
+        <div class="metric-icon">👥</div>
+      </div>
+      <div class="metric-card">
+        <div>
+          <div class="metric-label">Microservices Health</div>
+          <div class="metric-val" style="color: #34d399; font-size: 1.4rem;">HEALTHY (5/5)</div>
+        </div>
+        <div class="metric-icon">⚡</div>
+      </div>
+    </div>
+
+    <!-- Admin Section Tabs -->
+    <div class="admin-tabs">
+      <button class="atab active" onclick="switchAdminTab('products', this)">📦 Product Management (Product Service :3002)</button>
+      <button class="atab" onclick="switchAdminTab('orders', this)">🛒 Orders & Fulfillment (Order Service :3003)</button>
+      <button class="atab" onclick="switchAdminTab('users', this)">👥 Registered Users (User Service :3001)</button>
+      <button class="atab" onclick="switchAdminTab('payments', this)">💳 Transactions & Billing (Payment Service :3004)</button>
+      <button class="atab" onclick="switchAdminTab('notifications', this)">🔔 Notification Logs (Notification Service :3005)</button>
+    </div>
+
+    <!-- SECTION 1: PRODUCT MANAGEMENT -->
+    <div class="admin-section active" id="sec-products">
+      <!-- Add Product Card -->
+      <div class="form-card">
+        <div class="form-card-title">
+          <span>➕ Add New Product to Catalog (POST /api/products)</span>
+          <span style="font-size: 0.8rem; color: #38bdf8; font-weight: normal;">* Saves directly to products.db and immediately shows on Customer Storefront!</span>
+        </div>
+        <form onsubmit="handleCreateProduct(event)">
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Product Name *</label>
+              <input type="text" class="form-input" id="p-name" placeholder="e.g. Silk Embroidered Kurti" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Category *</label>
+              <select class="form-select" id="p-category" required>
+                <option value="1">Women Ethnic</option>
+                <option value="2">Women Western</option>
+                <option value="3">Men Fashion</option>
+                <option value="4">Electronics</option>
+                <option value="5">Home &amp; Kitchen</option>
+                <option value="6">Footwear &amp; Bags</option>
+                <option value="7">Beauty &amp; Health</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Selling Price (INR ₹) *</label>
+              <input type="number" step="0.01" class="form-input" id="p-price" placeholder="499" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Stock Inventory Units *</label>
+              <input type="number" class="form-input" id="p-stock" placeholder="100" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">SKU (Code) *</label>
+              <div style="display:flex; gap:0.4rem;">
+                <input type="text" class="form-input" id="p-sku" placeholder="SKU-ITEM-01" required>
+                <button type="button" class="nav-btn" onclick="generateSku()">Auto</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Icon / Emoji Badge</label>
+              <input type="text" class="form-input" id="p-image" placeholder="👗 or 📱 or 🍳" value="🛍️">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Detailed Product Description</label>
+            <textarea class="form-textarea" id="p-desc" placeholder="Fabric details, specifications, warranty, etc."></textarea>
+          </div>
+          <button type="submit" class="submit-btn">Add Product to Storefront</button>
+        </form>
+      </div>
+
+      <!-- Products Table -->
+      <div class="table-container">
+        <div style="padding: 1rem 1.25rem; font-weight: 700; color: #fff; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+          <span>All Live Products in Catalog</span>
+          <span style="font-size: 0.8rem; color: var(--text-muted);" id="prod-table-count">Loading...</span>
+        </div>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Icon</th>
+              <th>Product Name</th>
+              <th>Category</th>
+              <th>Price</th>
+              <th>Stock</th>
+              <th>SKU</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="products-tbody">
+            <tr><td colspan="8" style="text-align:center; color:var(--text-muted); padding:2rem;">Loading products from Product Service (:3002)...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SECTION 2: ORDERS MANAGEMENT -->
+    <div class="admin-section" id="sec-orders">
+      <div class="table-container">
+        <div style="padding: 1rem 1.25rem; font-weight: 700; color: #fff; border-bottom: 1px solid var(--border);">
+          Customer Orders (Order Service :3003)
+        </div>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Order #</th>
+              <th>User ID</th>
+              <th>Total Amount</th>
+              <th>Status</th>
+              <th>Shipping Address</th>
+              <th>Date</th>
+              <th>Update Status</th>
+            </tr>
+          </thead>
+          <tbody id="orders-tbody">
+            <tr><td colspan="7" style="text-align:center; padding:2rem;">Loading orders...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SECTION 3: USERS MANAGEMENT -->
+    <div class="admin-section" id="sec-users">
+      <div class="table-container">
+        <div style="padding: 1rem 1.25rem; font-weight: 700; color: #fff; border-bottom: 1px solid var(--border);">
+          Registered Users (User Service :3001)
+        </div>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Phone</th>
+              <th>Created At</th>
+            </tr>
+          </thead>
+          <tbody id="users-tbody">
+            <tr><td colspan="6" style="text-align:center; padding:2rem;">Loading users...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SECTION 4: PAYMENTS -->
+    <div class="admin-section" id="sec-payments">
+      <div class="table-container">
+        <div style="padding: 1rem 1.25rem; font-weight: 700; color: #fff; border-bottom: 1px solid var(--border);">
+          Transactions &amp; Payments (Payment Service :3004)
+        </div>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Transaction ID</th>
+              <th>Order ID</th>
+              <th>Customer ID</th>
+              <th>Amount</th>
+              <th>Method</th>
+              <th>Status</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody id="payments-tbody">
+            <tr><td colspan="7" style="text-align:center; padding:2rem;">Loading payments...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SECTION 5: NOTIFICATIONS -->
+    <div class="admin-section" id="sec-notifications">
+      <div class="table-container">
+        <div style="padding: 1rem 1.25rem; font-weight: 700; color: #fff; border-bottom: 1px solid var(--border);">
+          Dispatched Notification Alerts (Notification Service :3005)
+        </div>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>User ID</th>
+              <th>Channel</th>
+              <th>Subject</th>
+              <th>Message</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="notifs-tbody">
+            <tr><td colspan="6" style="text-align:center; padding:2rem;">Loading notifications...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Edit Product Modal -->
+  <div class="modal-backdrop" id="edit-modal" style="display:none;">
+    <div class="modal-card">
+      <h3 style="color:#fff; margin-bottom:1rem;">Edit Product (PUT /api/products/:id)</h3>
+      <input type="hidden" id="edit-id">
+      <div class="form-group">
+        <label class="form-label">Product Name</label>
+        <input type="text" class="form-input" id="edit-name">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Selling Price (INR ₹)</label>
+        <input type="number" step="0.01" class="form-input" id="edit-price">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Stock Quantity</label>
+        <input type="number" class="form-input" id="edit-stock">
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:1.25rem;">
+        <button class="nav-btn" onclick="closeEditModal()">Cancel</button>
+        <button class="submit-btn" onclick="saveProductEdit()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function showToast(msg, isSuccess = true) {
+      const toast = document.getElementById('admin-toast');
+      toast.textContent = msg;
+      toast.style.display = 'block';
+      toast.style.borderLeft = isSuccess ? '4px solid #10b981' : '4px solid #ef4444';
+      setTimeout(() => { toast.style.display = 'none'; }, 3000);
+    }
+
+    function switchAdminTab(tabName, btn) {
+      document.querySelectorAll('.atab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+      document.getElementById(`sec-${tabName}`).classList.add('active');
+    }
+
+    function generateSku() {
+      const rand = Math.floor(1000 + Math.random() * 9000);
+      document.getElementById('p-sku').value = `SKU-PROD-${rand}`;
+    }
+
+    // Load Products
+    async function loadProducts() {
+      try {
+        const res = await fetch('/api/products');
+        const json = await res.json();
+        const products = json.data || [];
+        document.getElementById('metric-prod-count').textContent = products.length;
+        document.getElementById('prod-table-count').textContent = `${products.length} Items Total`;
+
+        const tbody = document.getElementById('products-tbody');
+        if (products.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">No products in catalog.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = products.map(p => `
+          <tr>
+            <td><b>#${p.id}</b></td>
+            <td style="font-size:1.3rem;">${p.image_url || '🛍️'}</td>
+            <td>
+              <div style="font-weight:700; color:#fff;">${p.name}</div>
+              <div style="font-size:0.75rem; color:var(--text-muted); max-width:300px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${p.description || ''}</div>
+            </td>
+            <td><span class="status-tag status-tag-green">${p.category_name || 'General'}</span></td>
+            <td><b style="color:#34d399;">₹${Number(p.price).toLocaleString('en-IN')}</b></td>
+            <td>
+              <span class="${p.stock_quantity < 20 ? 'status-tag status-tag-amber' : ''}">${p.stock_quantity} units</span>
+            </td>
+            <td><span class="sku-pill">${p.sku}</span></td>
+            <td>
+              <div class="table-actions">
+                <button class="btn-tbl" onclick="openEditModal(${p.id}, '${escapeQuote(p.name)}', ${p.price}, ${p.stock_quantity})">Edit</button>
+                <button class="btn-tbl" onclick="quickRestock(${p.id}, 50)">+50 Stock</button>
+                <button class="btn-tbl btn-tbl-del" onclick="deleteProductItem(${p.id})">Delete</button>
+              </div>
+            </td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    function escapeQuote(str) {
+      return (str || '').replace(/'/g, "\\'");
+    }
+
+    // Create Product
+    async function handleCreateProduct(e) {
+      e.preventDefault();
+      const payload = {
+        name: document.getElementById('p-name').value,
+        category_id: parseInt(document.getElementById('p-category').value, 10),
+        price: parseFloat(document.getElementById('p-price').value),
+        stock_quantity: parseInt(document.getElementById('p-stock').value, 10),
+        sku: document.getElementById('p-sku').value,
+        image_url: document.getElementById('p-image').value,
+        description: document.getElementById('p-desc').value
+      };
+
+      try {
+        const res = await fetch('/api/products', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const json = await res.json();
+        if (res.ok) {
+          showToast(`✓ Added product "${payload.name}" successfully!`);
+          document.getElementById('p-name').value = '';
+          document.getElementById('p-price').value = '';
+          document.getElementById('p-stock').value = '';
+          document.getElementById('p-desc').value = '';
+          generateSku();
+          loadProducts();
+        } else {
+          showToast(`Error: ${json.message}`, false);
+        }
+      } catch (err) {
+        showToast(err.message, false);
+      }
+    }
+
+    // Quick Restock
+    async function quickRestock(id, qty) {
+      try {
+        const res = await fetch(`/api/products/${id}/restore-stock`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ quantity: qty })
+        });
+        if (res.ok) {
+          showToast(`✓ Added ${qty} units to stock!`);
+          loadProducts();
+        }
+      } catch (err) {
+        showToast(err.message, false);
+      }
+    }
+
+    // Delete Product
+    async function deleteProductItem(id) {
+      if (!confirm(`Are you sure you want to delete Product #${id}? This will remove it from the Customer Storefront immediately.`)) return;
+      try {
+        const res = await fetch(`/api/products/${id}`, { method: 'DELETE' });
+        if (res.ok) {
+          showToast(`✓ Product #${id} deleted.`);
+          loadProducts();
+        } else {
+          showToast('Failed to delete product', false);
+        }
+      } catch (err) {
+        showToast(err.message, false);
+      }
+    }
+
+    // Edit Product Modal
+    function openEditModal(id, name, price, stock) {
+      document.getElementById('edit-id').value = id;
+      document.getElementById('edit-name').value = name;
+      document.getElementById('edit-price').value = price;
+      document.getElementById('edit-stock').value = stock;
+      document.getElementById('edit-modal').style.display = 'flex';
+    }
+
+    function closeEditModal() {
+      document.getElementById('edit-modal').style.display = 'none';
+    }
+
+    async function saveProductEdit() {
+      const id = document.getElementById('edit-id').value;
+      const payload = {
+        name: document.getElementById('edit-name').value,
+        price: parseFloat(document.getElementById('edit-price').value),
+        stock_quantity: parseInt(document.getElementById('edit-stock').value, 10)
+      };
+
+      try {
+        const res = await fetch(`/api/products/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+          showToast(`✓ Product #${id} updated!`);
+          closeEditModal();
+          loadProducts();
+        }
+      } catch (err) {
+        showToast(err.message, false);
+      }
+    }
+
+    // Load Orders
+    async function loadOrders() {
+      try {
+        const res = await fetch('/api/orders');
+        const json = await res.json();
+        const orders = json.data || [];
+        document.getElementById('metric-order-count').textContent = orders.length;
+
+        const tbody = document.getElementById('orders-tbody');
+        if (orders.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">No orders placed yet.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = orders.map(o => `
+          <tr>
+            <td><b style="color:#fff;">${o.order_number}</b></td>
+            <td>User #${o.user_id}</td>
+            <td><b style="color:#34d399;">₹${Number(o.total_amount).toLocaleString('en-IN')}</b></td>
+            <td><span class="status-tag ${o.status === 'CONFIRMED' || o.status === 'SHIPPED' ? 'status-tag-green' : 'status-tag-amber'}">${o.status}</span></td>
+            <td style="max-width:250px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${o.shipping_address}</td>
+            <td style="font-size:0.75rem; color:var(--text-muted);">${o.created_at}</td>
+            <td>
+              <select class="form-select" style="padding:0.25rem 0.5rem; font-size:0.75rem;" onchange="updateOrderStatus(${o.id}, this.value)">
+                <option value="PENDING" ${o.status === 'PENDING' ? 'selected' : ''}>PENDING</option>
+                <option value="CONFIRMED" ${o.status === 'CONFIRMED' ? 'selected' : ''}>CONFIRMED</option>
+                <option value="SHIPPED" ${o.status === 'SHIPPED' ? 'selected' : ''}>SHIPPED</option>
+                <option value="DELIVERED" ${o.status === 'DELIVERED' ? 'selected' : ''}>DELIVERED</option>
+                <option value="CANCELLED" ${o.status === 'CANCELLED' ? 'selected' : ''}>CANCELLED</option>
+              </select>
+            </td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    async function updateOrderStatus(id, status) {
+      try {
+        const res = await fetch(`/api/orders/${id}/status`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status })
+        });
+        if (res.ok) {
+          showToast(`✓ Order #${id} status changed to ${status}!`);
+          loadOrders();
+        }
+      } catch (err) {
+        showToast(err.message, false);
+      }
+    }
+
+    // Load Users
+    async function loadUsers() {
+      try {
+        const res = await fetch('/api/users');
+        const json = await res.json();
+        const users = json.data || [];
+        document.getElementById('metric-user-count').textContent = users.length;
+
+        const tbody = document.getElementById('users-tbody');
+        tbody.innerHTML = users.map(u => `
+          <tr>
+            <td>#${u.id}</td>
+            <td><b>${u.name}</b></td>
+            <td style="color:#38bdf8;">${u.email}</td>
+            <td><span class="status-tag status-tag-green">${u.role}</span></td>
+            <td>${u.phone || 'N/A'}</td>
+            <td style="font-size:0.75rem; color:var(--text-muted);">${u.created_at}</td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    // Load Payments
+    async function loadPayments() {
+      try {
+        const res = await fetch('/api/payments');
+        const json = await res.json();
+        const payments = json.data || [];
+        const tbody = document.getElementById('payments-tbody');
+        tbody.innerHTML = payments.map(p => `
+          <tr>
+            <td><span class="sku-pill">${p.transaction_id}</span></td>
+            <td>Order #${p.order_id}</td>
+            <td>User #${p.user_id}</td>
+            <td><b style="color:#34d399;">₹${Number(p.amount).toLocaleString('en-IN')}</b></td>
+            <td>${p.payment_method}</td>
+            <td><span class="status-tag ${p.status === 'COMPLETED' ? 'status-tag-green' : 'status-tag-red'}">${p.status}</span></td>
+            <td style="font-size:0.75rem; color:var(--text-muted);">${p.created_at}</td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    // Load Notifications
+    async function loadNotifications() {
+      try {
+        const res = await fetch('/api/notifications');
+        const json = await res.json();
+        const notifs = json.data || [];
+        const tbody = document.getElementById('notifs-tbody');
+        tbody.innerHTML = notifs.map(n => `
+          <tr>
+            <td>#${n.id}</td>
+            <td>User #${n.user_id}</td>
+            <td><span class="sku-pill">${n.channel}</span></td>
+            <td><b>${n.subject}</b></td>
+            <td style="color:var(--text-muted); font-size:0.8rem;">${n.message}</td>
+            <td><span class="status-tag status-tag-green">${n.status}</span></td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    function loadAllAdminData() {
+      loadProducts();
+      loadOrders();
+      loadUsers();
+      loadPayments();
+      loadNotifications();
+      showToast('✓ Data refreshed from all 5 microservices!');
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      generateSku();
+      loadAllAdminData();
+    });
+  </script>
+</body>
+</html>

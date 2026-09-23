@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fashion - Lowest Prices, Free Delivery & Best Quality Shopping</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --brand-pink: #f43397;
+      --brand-pink-dark: #d81f7d;
+      --brand-pink-light: #fde8f3;
+      --brand-purple: #5c1f58;
+      --text-dark: #222222;
+      --text-muted: #666666;
+      --text-subtle: #888888;
+      --bg-light: #f9f9f9;
+      --white: #ffffff;
+      --border: #e8e8e8;
+      --green: #038d63;
+      --green-light: #e6f7f2;
+      --star: #ff9800;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+      --shadow-md: 0 6px 18px rgba(0,0,0,0.08);
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      line-height: 1.4;
+      overflow-x: hidden;
+    }
+
+    /* Top Utility Bar */
+    .top-strip {
+      background: #fdf2f8;
+      border-bottom: 1px solid #fbcfe8;
+      padding: 0.35rem 2rem;
+      font-size: 0.75rem;
+      color: var(--brand-purple);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+    }
+    .top-strip a { color: var(--brand-purple); text-decoration: none; margin-left: 1rem; }
+    .top-strip a:hover { text-decoration: underline; }
+
+    /* Main Header */
+    .header {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 0.75rem 2rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .header-inner {
+      max-width: 1320px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    /* Logo */
+    .logo-box {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .logo-text {
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: var(--brand-pink);
+      letter-spacing: -0.04em;
+    }
+    .logo-tag {
+      font-size: 0.65rem;
+      background: #f3e8ff;
+      color: #7e22ce;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      font-weight: 700;
+    }
+
+    /* Search Bar */
+    .search-wrapper {
+      flex: 1;
+      max-width: 540px;
+      position: relative;
+    }
+    .search-input {
+      width: 100%;
+      padding: 0.65rem 1rem 0.65rem 2.6rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .search-input:focus {
+      border-color: var(--brand-pink);
+      box-shadow: 0 0 0 3px rgba(244, 51, 151, 0.15);
+    }
+    .search-icon {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-subtle);
+    }
+
+    /* Header Navigation Items */
+    .header-nav {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: var(--text-dark);
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      position: relative;
+      transition: color 0.15s;
+    }
+    .nav-item:hover { color: var(--brand-pink); }
+    .nav-item-icon { font-size: 1.25rem; margin-bottom: 0.1rem; }
+
+    .cart-badge {
+      position: absolute;
+      top: -4px;
+      right: -8px;
+      background: var(--brand-pink);
+      color: white;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 0.1rem 0.4rem;
+      border-radius: 999px;
+    }
+
+    /* Categories Subnav */
+    .categories-bar {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 0.65rem 2rem;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    .categories-inner {
+      max-width: 1320px;
+      margin: 0 auto;
+      display: flex;
+      gap: 1.75rem;
+    }
+    .cat-link {
+      color: var(--text-dark);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      padding-bottom: 0.25rem;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+    }
+    .cat-link:hover, .cat-link.active {
+      color: var(--brand-pink);
+      border-bottom-color: var(--brand-pink);
+    }
+
+    /* Hero Promo Banner Section */
+    .hero-container {
+      max-width: 1320px;
+      margin: 1.5rem auto 1.75rem;
+      padding: 0 1rem;
+    }
+    .promo-banner {
+      background: linear-gradient(135deg, #fdf2f8 0%, #fae8ff 50%, #f3e8ff 100%);
+      border: 1px solid #f5d0fe;
+      border-radius: 12px;
+      padding: 2.25rem 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      position: relative;
+      box-shadow: var(--shadow-sm);
+    }
+    .promo-content h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #3b0764;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+    .promo-content h1 span { color: var(--brand-pink); }
+    .promo-content p {
+      font-size: 1.05rem;
+      color: #4b5563;
+      font-weight: 500;
+      margin-bottom: 1.25rem;
+    }
+    .promo-cta-btn {
+      background: var(--brand-pink);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.75rem;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(244, 51, 151, 0.35);
+      transition: all 0.2s;
+    }
+    .promo-cta-btn:hover { background: var(--brand-pink-dark); transform: scale(1.02); }
+
+    .promo-badges {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .p-badge-card {
+      background: white;
+      border: 1px solid #fbcfe8;
+      border-radius: 10px;
+      padding: 0.85rem 1.25rem;
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+    .p-badge-icon { font-size: 1.5rem; margin-bottom: 0.25rem; }
+    .p-badge-title { font-weight: 700; font-size: 0.85rem; color: #1e1b4b; }
+    .p-badge-sub { font-size: 0.72rem; color: #6b7280; }
+
+    /* Trust Highlights Strip */
+    .trust-strip {
+      max-width: 1320px;
+      margin: 0 auto 2rem;
+      padding: 0 1rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+    }
+    .trust-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .trust-icon {
+      width: 44px;
+      height: 44px;
+      background: #fdf2f8;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+    .trust-heading { font-weight: 700; font-size: 0.9rem; color: var(--text-dark); }
+    .trust-desc { font-size: 0.75rem; color: var(--text-muted); }
+
+    /* Flash Deals Section */
+    .section-container {
+      max-width: 1320px;
+      margin: 0 auto 2rem;
+      padding: 0 1rem;
+    }
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .section-title-large {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .timer-badge {
+      background: #fee2e2;
+      color: #b91c1c;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid #fca5a5;
+    }
+
+    /* Product Grid Layout */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.25rem;
+    }
+
+    /* Product Card (Fashion Styled) */
+    .m-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.2s ease;
+      position: relative;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    }
+    .m-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+      border-color: #fbcfe8;
+    }
+
+    .m-card-img-box {
+      height: 190px;
+      background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4.5rem;
+      position: relative;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .m-discount-tag {
+      position: absolute;
+      top: 0.75rem;
+      left: 0.75rem;
+      background: #038d63;
+      color: white;
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+    .m-sku-tag {
+      position: absolute;
+      bottom: 0.5rem;
+      right: 0.5rem;
+      font-size: 0.65rem;
+      background: rgba(255,255,255,0.85);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      color: #64748b;
+      font-weight: 600;
+    }
+
+    .m-card-body {
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+    .m-category-name {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--text-subtle);
+      text-transform: uppercase;
+      margin-bottom: 0.25rem;
+    }
+    .m-product-title {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 0.5rem;
+      line-height: 1.35;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      min-height: 2.5rem;
+    }
+
+    /* Price Section */
+    .m-price-box {
+      display: flex;
+      align-items: baseline;
+      gap: 0.45rem;
+      margin-bottom: 0.4rem;
+    }
+    .m-price-current {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--text-dark);
+    }
+    .m-price-mrp {
+      font-size: 0.8rem;
+      color: var(--text-subtle);
+      text-decoration: line-through;
+    }
+    .m-discount-pct {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--green);
+    }
+
+    /* Free Delivery Badge & Rating */
+    .m-perks {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+    }
+    .free-delivery-badge {
+      font-size: 0.72rem;
+      background: #f1f5f9;
+      color: #475569;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+    .m-rating {
+      background: var(--green);
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.15rem 0.45rem;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.2rem;
+    }
+
+    /* Card Action Buttons */
+    .m-card-actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: auto;
+      border-top: 1px solid #f1f5f9;
+      padding-top: 0.75rem;
+    }
+    .btn-add-cart {
+      flex: 1;
+      background: var(--white);
+      color: var(--brand-pink);
+      border: 1.5px solid var(--brand-pink);
+      padding: 0.5rem;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-add-cart:hover {
+      background: var(--brand-pink-light);
+    }
+    .btn-buy-now {
+      flex: 1;
+      background: var(--brand-pink);
+      color: white;
+      border: none;
+      padding: 0.5rem;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-buy-now:hover {
+      background: var(--brand-pink-dark);
+    }
+
+    /* Shopping Cart Slide-out Drawer */
+    .cart-drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .cart-drawer-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .cart-drawer {
+      position: fixed;
+      top: 0;
+      right: -420px;
+      width: 100%;
+      max-width: 420px;
+      height: 100%;
+      background: white;
+      box-shadow: -4px 0 20px rgba(0,0,0,0.15);
+      z-index: 201;
+      transition: right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+    }
+    .cart-drawer.open { right: 0; }
+
+    .drawer-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .drawer-header h3 { font-size: 1.15rem; font-weight: 800; color: var(--text-dark); }
+    .drawer-close-btn { background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--text-muted); }
+
+    .drawer-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.25rem 1.5rem;
+    }
+    .cart-item-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .cart-item-title { font-weight: 700; font-size: 0.85rem; margin-bottom: 0.2rem; }
+    .cart-item-price { font-weight: 800; color: var(--brand-pink); }
+    .qty-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.4rem;
+    }
+    .qty-btn {
+      width: 24px;
+      height: 24px;
+      border: 1px solid #cbd5e1;
+      background: white;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .drawer-footer {
+      border-top: 1px solid var(--border);
+      padding: 1.25rem 1.5rem;
+      background: #fafafa;
+    }
+    .checkout-flow-btn {
+      width: 100%;
+      background: var(--brand-pink);
+      color: white;
+      border: none;
+      padding: 0.85rem;
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .checkout-flow-btn:hover { background: var(--brand-pink-dark); }
+
+    /* Customer Reviews Section */
+    .reviews-section {
+      background: white;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 3rem 1rem;
+      margin: 3rem 0;
+    }
+    .reviews-inner { max-width: 1320px; margin: 0 auto; }
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    .review-card {
+      background: #fdf2f8;
+      border: 1px solid #fbcfe8;
+      border-radius: 10px;
+      padding: 1.25rem;
+    }
+    .reviewer-name { font-weight: 700; font-size: 0.9rem; color: #1e1b4b; }
+    .review-stars { color: #f59e0b; font-size: 0.85rem; margin: 0.25rem 0 0.5rem; }
+    .review-text { font-size: 0.82rem; color: #4b5563; font-style: italic; }
+
+    /* Comprehensive Footer */
+    .footer {
+      background: #111827;
+      color: #94a3b8;
+      padding: 3rem 2rem 2rem;
+      border-top: 1px solid #1f2937;
+    }
+    .footer-inner {
+      max-width: 1320px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2.5rem;
+    }
+    .footer-col h5 { color: white; font-size: 0.95rem; font-weight: 700; margin-bottom: 1rem; }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 0.5rem; font-size: 0.82rem; }
+    .footer-col a { color: #94a3b8; text-decoration: none; transition: color 0.15s; }
+    .footer-col a:hover { color: var(--brand-pink); }
+    .footer-bottom {
+      max-width: 1320px;
+      margin: 0 auto;
+      border-top: 1px solid #1f2937;
+      padding-top: 1.5rem;
+      text-align: center;
+      font-size: 0.78rem;
+    }
+
+    /* Toast */
+    #user-toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1e1b4b;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      z-index: 300;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="user-toast"></div>
+
+  <!-- Top Utility Strip -->
+  <div class="top-strip">
+    <div>⚡ Free Delivery on All Orders &bull; Cash On Delivery Available &bull; Easy 7-Day Returns</div>
+    <div>
+      <span>🇮🇳 India's Favorite Fashion Store</span>
+      <a href="/api-docs" target="_blank">📖 Swagger API Docs</a>
+    </div>
+  </div>
+
+  <!-- Main Fashion Header -->
+  <header class="header">
+    <div class="header-inner">
+      <!-- Logo -->
+      <a href="/" class="logo-box">
+        <div class="logo-text">fashion</div>
+        <span class="logo-tag">TRENDS</span>
+      </a>
+
+      <!-- Search Bar -->
+      <div class="search-wrapper">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-input" id="search-input-field" placeholder="Try Saree, Kurti, Watch, Shoes, iPhone, Laptop..." oninput="handleLiveSearch(this.value)">
+      </div>
+
+      <!-- Header Nav Actions -->
+      <div class="header-nav">
+        <div class="nav-item" onclick="toggleCartDrawer()">
+          <span class="nav-item-icon">🛒</span>
+          <span>Cart</span>
+          <span class="cart-badge" id="cart-item-count">0</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Categories Subnavigation -->
+  <nav class="categories-bar">
+    <div class="categories-inner">
+      <span class="cat-link active" onclick="selectCatFilter(null, this)">All Categories</span>
+      <span class="cat-link" onclick="selectCatFilter(1, this)">Women Ethnic</span>
+      <span class="cat-link" onclick="selectCatFilter(2, this)">Women Western</span>
+      <span class="cat-link" onclick="selectCatFilter(3, this)">Men Fashion</span>
+      <span class="cat-link" onclick="selectCatFilter(4, this)">Electronics</span>
+      <span class="cat-link" onclick="selectCatFilter(5, this)">Home &amp; Kitchen</span>
+      <span class="cat-link" onclick="selectCatFilter(6, this)">Footwear &amp; Bags</span>
+      <span class="cat-link" onclick="selectCatFilter(7, this)">Beauty &amp; Health</span>
+    </div>
+  </nav>
+
+  <!-- Hero Promo Banner -->
+  <div class="hero-container">
+    <div class="promo-banner">
+      <div class="promo-content">
+        <h1>Lowest Prices &bull; Best Quality Shopping<br><span>Delivered Directly To You</span></h1>
+        <p>Explore thousands of ethnic wear, casuals, gadgets &amp; essentials with Free Delivery &amp; COD.</p>
+        <button class="promo-cta-btn" onclick="document.getElementById('products-section').scrollIntoView({behavior:'smooth'})">Explore All Products ↓</button>
+      </div>
+      <div class="promo-badges">
+        <div class="p-badge-card">
+          <div class="p-badge-icon">🚚</div>
+          <div class="p-badge-title">Free Delivery</div>
+          <div class="p-badge-sub">On all products</div>
+        </div>
+        <div class="p-badge-card">
+          <div class="p-badge-icon">💵</div>
+          <div class="p-badge-title">Cash on Delivery</div>
+          <div class="p-badge-sub">Pay at doorstep</div>
+        </div>
+        <div class="p-badge-card">
+          <div class="p-badge-icon">🔄</div>
+          <div class="p-badge-title">Easy Returns</div>
+          <div class="p-badge-sub">7 days return policy</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Trust Highlights Strip -->
+  <div class="trust-strip">
+    <div class="trust-card">
+      <div class="trust-icon">🏷️</div>
+      <div>
+        <div class="trust-heading">Lowest Wholesale Prices</div>
+        <div class="trust-desc">Direct from manufacturers</div>
+      </div>
+    </div>
+    <div class="trust-card">
+      <div class="trust-icon">🛡️</div>
+      <div>
+        <div class="trust-heading">100% Safe Payments</div>
+        <div class="trust-desc">Secured via Payment Service</div>
+      </div>
+    </div>
+    <div class="trust-card">
+      <div class="trust-icon">⚡</div>
+      <div>
+        <div class="trust-heading">5 Microservices Engine</div>
+        <div class="trust-desc">Decoupled real-time database sync</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Products Section (Long Page with 16+ Products) -->
+  <section class="section-container" id="products-section">
+    <div class="section-header">
+      <div>
+        <div class="section-title-large">
+          <span>Products For You</span>
+          <span class="timer-badge" id="deal-timer">Deal Ends in 04h : 30m : 15s</span>
+        </div>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.2rem;">All items fetched live from Product Service (:3002). Instant real-time catalog sync!</p>
+      </div>
+      <div>
+        <span style="font-size: 0.85rem; font-weight: 700; color: #f43397;" id="items-found-count">Loading items...</span>
+      </div>
+    </div>
+
+    <!-- Product Grid -->
+    <div class="products-grid" id="fashion-product-grid">
+      <div style="text-align: center; padding: 4rem; color: var(--text-muted); grid-column: 1 / -1;">
+        Loading catalog from Product Service...
+      </div>
+    </div>
+  </section>
+
+  <!-- Customer Reviews Section -->
+  <section class="reviews-section">
+    <div class="reviews-inner">
+      <h3 style="font-size: 1.4rem; font-weight: 800; color: #1e1b4b; text-align: center;">Loved by Over 10 Crore+ Customers Across India</h3>
+      <p style="text-align: center; color: #6b7280; font-size: 0.88rem; margin-top: 0.35rem;">Real experiences from verified buyers.</p>
+
+      <div class="reviews-grid">
+        <div class="review-card">
+          <div class="reviewer-name">Pooja Sharma &bull; New Delhi</div>
+          <div class="review-stars">★★★★★</div>
+          <div class="review-text">"The Georgette Anarkali Kurti quality was beyond expectation for just ₹499! Free delivery arrived in 2 days."</div>
+        </div>
+        <div class="review-card">
+          <div class="reviewer-name">Amit Verma &bull; Bengaluru</div>
+          <div class="review-stars">★★★★★</div>
+          <div class="review-text">"Bought the boAt Airdopes. 100% genuine product, fast connectivity, and seamless UPI checkout!"</div>
+        </div>
+        <div class="review-card">
+          <div class="reviewer-name">Sunita Devi &bull; Jaipur</div>
+          <div class="review-stars">★★★★★</div>
+          <div class="review-text">"The Kanjeevaram Silk Saree has a wonderful shine. Highly recommend Fashion for affordable ethnic fashion."</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide-Out Cart Drawer -->
+  <div class="cart-drawer-backdrop" id="cart-backdrop" onclick="toggleCartDrawer()"></div>
+  <div class="cart-drawer" id="cart-drawer">
+    <div class="drawer-header">
+      <h3><span>🛒</span> Shopping Bag</h3>
+      <button class="drawer-close-btn" onclick="toggleCartDrawer()">&times;</button>
+    </div>
+
+    <div class="drawer-body" id="cart-drawer-items">
+      <div style="text-align: center; color: var(--text-muted); padding: 3rem 0;">
+        Your bag is empty.<br>Add some awesome items!
+      </div>
+    </div>
+
+    <div class="drawer-footer">
+      <div style="display: flex; justify-content: space-between; font-weight: 800; font-size: 1.15rem; margin-bottom: 1rem; color: var(--text-dark);">
+        <span>Total Payable:</span>
+        <span id="drawer-total-price" style="color: var(--brand-pink);">₹0.00</span>
+      </div>
+
+      <div style="margin-bottom: 0.75rem;">
+        <label style="font-size: 0.75rem; font-weight: 700; color: #4b5563; display: block; margin-bottom: 0.25rem;">Select Customer (User Service :3001):</label>
+        <select id="drawer-user-id" style="width: 100%; padding: 0.45rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem;">
+          <option value="1">Rahul Sharma (rahul@example.com)</option>
+          <option value="2">Priya Patel (priya@example.com)</option>
+        </select>
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <label style="font-size: 0.75rem; font-weight: 700; color: #4b5563; display: block; margin-bottom: 0.25rem;">Delivery Address:</label>
+        <input type="text" id="drawer-address" value="42 MG Road, Bengaluru, Karnataka, 560001" style="width: 100%; padding: 0.45rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem;">
+      </div>
+
+      <div style="margin-bottom: 1.25rem;">
+        <label style="font-size: 0.75rem; font-weight: 700; color: #4b5563; display: block; margin-bottom: 0.25rem;">Payment Option (Payment Service :3004):</label>
+        <select id="drawer-pay-method" style="width: 100%; padding: 0.45rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem;">
+          <option value="UPI">UPI / Google Pay / PhonePe</option>
+          <option value="CASH_ON_DELIVERY">Cash on Delivery (COD)</option>
+          <option value="CREDIT_CARD">Credit / Debit Card</option>
+        </select>
+      </div>
+
+      <button class="checkout-flow-btn" id="btn-drawer-checkout" onclick="executeStoreCheckout()">
+        Place Order with Free Delivery
+      </button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-col">
+        <h5>Shop Non-Stop on Fashion</h5>
+        <p style="font-size:0.8rem; line-height:1.6; margin-bottom:1rem;">Trusted by millions for everyday fashion, electronics, home decor &amp; beauty essentials at genuine wholesale prices.</p>
+        <div style="font-size:0.85rem; color:white; font-weight:700;">Backend: 5 Microservices Engine (SBSMA)</div>
+      </div>
+      <div class="footer-col">
+        <h5>Customer Policies</h5>
+        <ul>
+          <li><a href="#">Contact Us</a></li>
+          <li><a href="#">FAQ &amp; Help</a></li>
+          <li><a href="#">Terms &amp; Conditions</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Returns &amp; Refunds</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Useful Links</h5>
+        <ul>
+          <li><a href="/api-docs" target="_blank">📖 OpenAPI Swagger UI</a></li>
+          <li><a href="/health" target="_blank">⚡ Gateway Health Check</a></li>
+          <li><a href="/postman-collection">📥 Postman Collection</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Reach Out to Us</h5>
+        <p style="font-size:0.82rem;">Fashion / SBSMA Project<br>Bengaluru, Karnataka, India<br>support@fashion-store.com</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2026 Fashion / SBSMA Microservices Platform. All rights reserved. Built with Node.js, Express, and Database-per-Service SQLite architecture.
+    </div>
+  </footer>
+
+  <script>
+    let productsList = [];
+    let cartList = [];
+
+    function showToast(msg) {
+      const toast = document.getElementById('user-toast');
+      toast.textContent = msg;
+      toast.style.display = 'block';
+      setTimeout(() => { toast.style.display = 'none'; }, 2800);
+    }
+
+    function toggleCartDrawer() {
+      const backdrop = document.getElementById('cart-backdrop');
+      const drawer = document.getElementById('cart-drawer');
+      const isOpen = drawer.classList.contains('open');
+      if (isOpen) {
+        drawer.classList.remove('open');
+        backdrop.classList.remove('open');
+      } else {
+        drawer.classList.add('open');
+        backdrop.classList.add('open');
+        renderDrawerItems();
+      }
+    }
+
+    // Load Products from Product Service (:3002)
+    async function loadStoreProducts(catId = null, search = '') {
+      const grid = document.getElementById('fashion-product-grid');
+      const counter = document.getElementById('items-found-count');
+
+      try {
+        let url = '/api/products';
+        const params = [];
+        if (catId) params.push(`category_id=${catId}`);
+        if (search) params.push(`search=${encodeURIComponent(search)}`);
+        if (params.length) url += `?${params.join('&')}`;
+
+        const res = await fetch(url);
+        const json = await res.json();
+        productsList = json.data || [];
+        counter.textContent = `${productsList.length} Products Available`;
+
+        if (productsList.length === 0) {
+          grid.innerHTML = '<div style="text-align:center; padding:3rem; grid-column:1/-1; color:#666;">No products found in this category.</div>';
+          return;
+        }
+
+        grid.innerHTML = productsList.map(p => {
+          const discount = Math.min(75, Math.max(35, Math.floor(((p.price * 2.2 - p.price) / (p.price * 2.2)) * 100)));
+          const mrp = Math.round(p.price * (1 + discount / 100));
+
+          return `
+            <div class="m-card">
+              <div class="m-card-img-box">
+                <span class="m-discount-tag">${discount}% OFF</span>
+                <span>${p.image_url || '🛍️'}</span>
+                <span class="m-sku-tag">${p.sku}</span>
+              </div>
+              <div class="m-card-body">
+                <div class="m-category-name">${p.category_name || 'Ethnic Wear'}</div>
+                <div class="m-product-title" title="${p.name}">${p.name}</div>
+                
+                <div class="m-price-box">
+                  <span class="m-price-current">₹${Number(p.price).toLocaleString('en-IN')}</span>
+                  <span class="m-price-mrp">₹${mrp.toLocaleString('en-IN')}</span>
+                  <span class="m-discount-pct">${discount}% off</span>
+                </div>
+
+                <div class="m-perks">
+                  <span class="free-delivery-badge">Free Delivery</span>
+                  <span class="m-rating">4.2 ★</span>
+                </div>
+
+                <div class="m-card-actions">
+                  <button class="btn-add-cart" onclick="addToBag(${p.id})">+ Add to Bag</button>
+                  <button class="btn-buy-now" onclick="buyNow(${p.id})">Buy Now</button>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      } catch (err) {
+        grid.innerHTML = `<div style="text-align:center; padding:3rem; color:#ef4444; grid-column:1/-1;">Failed to load catalog: ${err.message}</div>`;
+      }
+    }
+
+    function selectCatFilter(catId, elem) {
+      document.querySelectorAll('.cat-link').forEach(l => l.classList.remove('active'));
+      elem.classList.add('active');
+      const search = document.getElementById('search-input-field').value;
+      loadStoreProducts(catId, search);
+    }
+
+    let liveSearchTimeout = null;
+    function handleLiveSearch(val) {
+      clearTimeout(liveSearchTimeout);
+      liveSearchTimeout = setTimeout(() => {
+        loadStoreProducts(null, val);
+      }, 250);
+    }
+
+    function addToBag(prodId) {
+      const p = productsList.find(item => item.id === prodId);
+      if (!p) return;
+
+      const existing = cartList.find(item => item.product_id === prodId);
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cartList.push({
+          product_id: p.id,
+          name: p.name,
+          price: p.price,
+          quantity: 1
+        });
+      }
+
+      updateCartBadge();
+      showToast(`✓ Added "${p.name.slice(0, 25)}..." to Cart!`);
+    }
+
+    function buyNow(prodId) {
+      addToBag(prodId);
+      toggleCartDrawer();
+    }
+
+    function updateCartBadge() {
+      const badge = document.getElementById('cart-item-count');
+      const totalQty = cartList.reduce((sum, i) => sum + i.quantity, 0);
+      badge.textContent = totalQty;
+    }
+
+    function renderDrawerItems() {
+      const container = document.getElementById('cart-drawer-items');
+      const totalEl = document.getElementById('drawer-total-price');
+
+      if (cartList.length === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; color: var(--text-muted); padding: 3rem 0;">
+            <div style="font-size: 3rem; margin-bottom: 0.5rem;">🛍️</div>
+            Your bag is empty.<br>Add some awesome items!
+          </div>`;
+        totalEl.textContent = '₹0.00';
+        return;
+      }
+
+      let total = 0;
+      container.innerHTML = cartList.map((item, idx) => {
+        const subtotal = item.price * item.quantity;
+        total += subtotal;
+        return `
+          <div class="cart-item-card">
+            <div>
+              <div class="cart-item-title">${item.name}</div>
+              <div class="cart-item-price">₹${Number(item.price).toLocaleString('en-IN')}</div>
+              <div class="qty-controls">
+                <button class="qty-btn" onclick="changeQty(${idx}, -1)">-</button>
+                <span style="font-weight:700; font-size:0.85rem;">${item.quantity}</span>
+                <button class="qty-btn" onclick="changeQty(${idx}, 1)">+</button>
+              </div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-weight:800; font-size:0.95rem;">₹${Number(subtotal).toLocaleString('en-IN')}</div>
+              <button onclick="removeItem(${idx})" style="background:none; border:none; color:#ef4444; font-size:0.75rem; cursor:pointer; margin-top:0.3rem;">Remove</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      totalEl.textContent = `₹${total.toLocaleString('en-IN')}`;
+    }
+
+    function changeQty(idx, delta) {
+      cartList[idx].quantity += delta;
+      if (cartList[idx].quantity <= 0) {
+        cartList.splice(idx, 1);
+      }
+      updateCartBadge();
+      renderDrawerItems();
+    }
+
+    function removeItem(idx) {
+      cartList.splice(idx, 1);
+      updateCartBadge();
+      renderDrawerItems();
+    }
+
+    // Checkout Flow Across Microservices
+    async function executeStoreCheckout() {
+      if (cartList.length === 0) {
+        showToast('Your bag is empty! Please add products before checkout.');
+        return;
+      }
+
+      const btn = document.getElementById('btn-drawer-checkout');
+      const userId = parseInt(document.getElementById('drawer-user-id').value, 10);
+      const address = document.getElementById('drawer-address').value;
+      const payMethod = document.getElementById('drawer-pay-method').value;
+
+      btn.disabled = true;
+      btn.textContent = 'Placing Order Across Microservices...';
+
+      try {
+        // Step 1: Order Service Call (which reserves stock in Product Service)
+        const orderPayload = {
+          user_id: userId,
+          shipping_address: address,
+          items: cartList.map(i => ({ product_id: i.product_id, quantity: i.quantity }))
+        };
+
+        const res = await fetch('/api/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(orderPayload)
+        });
+
+        const orderData = await res.json();
+        if (!res.ok) throw new Error(orderData.message || 'Order failed');
+
+        const order = orderData.data;
+
+        // Step 2: Payment Service Call (confirms order)
+        const payRes = await fetch('/api/payments', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            order_id: order.id,
+            user_id: userId,
+            amount: order.total_amount,
+            payment_method: payMethod,
+            currency: 'INR'
+          })
+        });
+
+        const payData = await payRes.json();
+
+        alert(`🎉 ORDER PLACED SUCCESSFULLY!\n\nOrder Number: ${order.order_number}\nTotal Amount: ₹${Number(order.total_amount).toLocaleString('en-IN')}\nPayment: ${payMethod} (${payData.data ? payData.data.status : 'CONFIRMED'})\n\n✓ Inventory reserved in Product Service\n✓ Order logged in Order Service\n✓ Transaction processed in Payment Service\n✓ Confirmation alert sent via Notification Service!`);
+
+        cartList = [];
+        updateCartBadge();
+        toggleCartDrawer();
+        loadStoreProducts();
+        showToast('✓ Order placed and confirmed!');
+      } catch (err) {
+        alert('Order Error: ' + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Place Order with Free Delivery';
+      }
+    }
+
+    // Auto-refresh every 12 seconds so catalog changes reflect live!
+    setInterval(() => {
+      loadStoreProducts();
+    }, 12000);
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadStoreProducts();
+    });
+  </script>
+</body>
+</html>

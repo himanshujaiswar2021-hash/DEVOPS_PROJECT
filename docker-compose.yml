@@ -1,0 +1,180 @@
+name: microservices-ecommerce
+
+services:
+  # ==========================================
+  # API GATEWAY (Port 3000)
+  # Reverse proxy, Swagger UI, health aggregator
+  # ==========================================
+  api-gateway:
+    build: .
+    container_name: api-gateway
+    restart: unless-stopped
+    command: ["node", "services/api-gateway/server.js"]
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - USER_SERVICE_URL=http://user-service:3001
+      - PRODUCT_SERVICE_URL=http://product-service:3002
+      - ORDER_SERVICE_URL=http://order-service:3003
+      - PAYMENT_SERVICE_URL=http://payment-service:3004
+      - NOTIFICATION_SERVICE_URL=http://notification-service:3005
+    depends_on:
+      user-service:
+        condition: service_healthy
+      product-service:
+        condition: service_healthy
+      order-service:
+        condition: service_healthy
+      payment-service:
+        condition: service_healthy
+      notification-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3000/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    networks:
+      - microservices-net
+
+  # ==========================================
+  # USER SERVICE (Port 3001)
+  # ==========================================
+  user-service:
+    build: .
+    container_name: user-service
+    restart: unless-stopped
+    command: ["node", "services/user-service/server.js"]
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+    volumes:
+      - user-data:/app/services/user-service/data
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3001/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 3s
+    networks:
+      - microservices-net
+
+  # ==========================================
+  # PRODUCT SERVICE (Port 3002)
+  # ==========================================
+  product-service:
+    build: .
+    container_name: product-service
+    restart: unless-stopped
+    command: ["node", "services/product-service/server.js"]
+    ports:
+      - "3002:3002"
+    environment:
+      - PORT=3002
+    volumes:
+      - product-data:/app/services/product-service/data
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3002/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 3s
+    networks:
+      - microservices-net
+
+  # ==========================================
+  # ORDER SERVICE (Port 3003)
+  # ==========================================
+  order-service:
+    build: .
+    container_name: order-service
+    restart: unless-stopped
+    command: ["node", "services/order-service/server.js"]
+    ports:
+      - "3003:3003"
+    environment:
+      - PORT=3003
+      - PRODUCT_SERVICE_URL=http://product-service:3002
+      - NOTIFICATION_SERVICE_URL=http://notification-service:3005
+    depends_on:
+      product-service:
+        condition: service_healthy
+      notification-service:
+        condition: service_healthy
+    volumes:
+      - order-data:/app/services/order-service/data
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3003/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 3s
+    networks:
+      - microservices-net
+
+  # ==========================================
+  # PAYMENT SERVICE (Port 3004)
+  # ==========================================
+  payment-service:
+    build: .
+    container_name: payment-service
+    restart: unless-stopped
+    command: ["node", "services/payment-service/server.js"]
+    ports:
+      - "3004:3004"
+    environment:
+      - PORT=3004
+      - ORDER_SERVICE_URL=http://order-service:3003
+      - NOTIFICATION_SERVICE_URL=http://notification-service:3005
+    depends_on:
+      order-service:
+        condition: service_healthy
+      notification-service:
+        condition: service_healthy
+    volumes:
+      - payment-data:/app/services/payment-service/data
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3004/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 3s
+    networks:
+      - microservices-net
+
+  # ==========================================
+  # NOTIFICATION SERVICE (Port 3005)
+  # ==========================================
+  notification-service:
+    build: .
+    container_name: notification-service
+    restart: unless-stopped
+    command: ["node", "services/notification-service/server.js"]
+    ports:
+      - "3005:3005"
+    environment:
+      - PORT=3005
+    volumes:
+      - notification-data:/app/services/notification-service/data
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3005/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 3s
+    networks:
+      - microservices-net
+
+volumes:
+  user-data:
+  product-data:
+  order-data:
+  payment-data:
+  notification-data:
+
+networks:
+  microservices-net:
+    driver: bridge

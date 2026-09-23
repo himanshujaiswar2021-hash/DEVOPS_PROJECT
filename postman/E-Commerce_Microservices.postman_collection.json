@@ -1,0 +1,301 @@
+{
+  "info": {
+    "_postman_id": "a9d7c001-2026-4b89-a21b-microservices01",
+    "name": "SBSMA - E-Commerce Microservices Backend",
+    "description": "Complete Postman collection testing all 5 microservices across GET, POST, PUT, DELETE operations with request body examples and expected responses.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000", "type": "string" },
+    { "key": "userServiceUrl", "value": "http://localhost:3001", "type": "string" },
+    { "key": "productServiceUrl", "value": "http://localhost:3002", "type": "string" },
+    { "key": "orderServiceUrl", "value": "http://localhost:3003", "type": "string" },
+    { "key": "paymentServiceUrl", "value": "http://localhost:3004", "type": "string" },
+    { "key": "notificationServiceUrl", "value": "http://localhost:3005", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "1. User Service",
+      "item": [
+        {
+          "name": "POST Create User",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Rohan Mehta\",\n  \"email\": \"rohan.mehta@example.com\",\n  \"password\": \"securePass123\",\n  \"role\": \"customer\",\n  \"phone\": \"+91-9876500011\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/users", "host": ["{{baseUrl}}"], "path": ["api", "users"] }
+          }
+        },
+        {
+          "name": "GET List Users",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/users", "host": ["{{baseUrl}}"], "path": ["api", "users"] }
+          }
+        },
+        {
+          "name": "GET Single User",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/users/1", "host": ["{{baseUrl}}"], "path": ["api", "users", "1"] }
+          }
+        },
+        {
+          "name": "PUT Update User",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Rahul S. Sharma\",\n  \"phone\": \"+91-9988776655\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/users/1", "host": ["{{baseUrl}}"], "path": ["api", "users", "1"] }
+          }
+        },
+        {
+          "name": "DELETE Delete User",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/api/users/2", "host": ["{{baseUrl}}"], "path": ["api", "users", "2"] }
+          }
+        },
+        {
+          "name": "POST Add Address",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"street\": \"100 Residency Road\",\n  \"city\": \"Bengaluru\",\n  \"state\": \"Karnataka\",\n  \"zip_code\": \"560025\",\n  \"country\": \"India\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/users/1/addresses", "host": ["{{baseUrl}}"], "path": ["api", "users", "1", "addresses"] }
+          }
+        },
+        {
+          "name": "GET User Addresses",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/users/1/addresses", "host": ["{{baseUrl}}"], "path": ["api", "users", "1", "addresses"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Product Service",
+      "item": [
+        {
+          "name": "POST Create Product",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"category_id\": 1,\n  \"name\": \"Logitech MX Master 3S Mouse\",\n  \"description\": \"Quiet clicks, 8K DPI sensor, Bluetooth/Wireless\",\n  \"price\": 8995.00,\n  \"stock_quantity\": 40,\n  \"sku\": \"SKU-LOGI-MX3S\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/products", "host": ["{{baseUrl}}"], "path": ["api", "products"] }
+          }
+        },
+        {
+          "name": "GET List Products",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/products", "host": ["{{baseUrl}}"], "path": ["api", "products"] }
+          }
+        },
+        {
+          "name": "GET Single Product",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/products/1", "host": ["{{baseUrl}}"], "path": ["api", "products", "1"] }
+          }
+        },
+        {
+          "name": "PUT Update Product",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"price\": 114999.00,\n  \"stock_quantity\": 30\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/products/1", "host": ["{{baseUrl}}"], "path": ["api", "products", "1"] }
+          }
+        },
+        {
+          "name": "DELETE Delete Product",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/api/products/5", "host": ["{{baseUrl}}"], "path": ["api", "products", "5"] }
+          }
+        },
+        {
+          "name": "GET Categories",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/products/categories", "host": ["{{baseUrl}}"], "path": ["api", "products", "categories"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Order Service",
+      "item": [
+        {
+          "name": "POST Create Order",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": 1,\n  \"shipping_address\": \"42 MG Road, Bengaluru, Karnataka, 560001\",\n  \"items\": [\n    {\n      \"product_id\": 1,\n      \"quantity\": 1\n    }\n  ]\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/orders", "host": ["{{baseUrl}}"], "path": ["api", "orders"] }
+          }
+        },
+        {
+          "name": "GET List Orders",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/orders", "host": ["{{baseUrl}}"], "path": ["api", "orders"] }
+          }
+        },
+        {
+          "name": "GET Single Order",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/orders/1", "host": ["{{baseUrl}}"], "path": ["api", "orders", "1"] }
+          }
+        },
+        {
+          "name": "PUT Update Order Status",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"SHIPPED\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/orders/1/status", "host": ["{{baseUrl}}"], "path": ["api", "orders", "1", "status"] }
+          }
+        },
+        {
+          "name": "DELETE Cancel Order",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/api/orders/1", "host": ["{{baseUrl}}"], "path": ["api", "orders", "1"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Payment Service",
+      "item": [
+        {
+          "name": "POST Process Payment",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"order_id\": 1,\n  \"user_id\": 1,\n  \"amount\": 119999.00,\n  \"payment_method\": \"UPI\",\n  \"currency\": \"INR\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/payments", "host": ["{{baseUrl}}"], "path": ["api", "payments"] }
+          }
+        },
+        {
+          "name": "GET List Payments",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/payments", "host": ["{{baseUrl}}"], "path": ["api", "payments"] }
+          }
+        },
+        {
+          "name": "GET Single Payment",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/payments/1", "host": ["{{baseUrl}}"], "path": ["api", "payments", "1"] }
+          }
+        },
+        {
+          "name": "PUT Update Payment",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"COMPLETED\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/payments/1", "host": ["{{baseUrl}}"], "path": ["api", "payments", "1"] }
+          }
+        },
+        {
+          "name": "DELETE Refund Payment",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/api/payments/1", "host": ["{{baseUrl}}"], "path": ["api", "payments", "1"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Notification Service",
+      "item": [
+        {
+          "name": "POST Send Notification",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": 1,\n  \"channel\": \"EMAIL\",\n  \"subject\": \"Flash Sale Alert!\",\n  \"message\": \"Get up to 50% discount on summer electronics.\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/notifications", "host": ["{{baseUrl}}"], "path": ["api", "notifications"] }
+          }
+        },
+        {
+          "name": "GET List Notifications",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/notifications", "host": ["{{baseUrl}}"], "path": ["api", "notifications"] }
+          }
+        },
+        {
+          "name": "GET Single Notification",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/notifications/1", "host": ["{{baseUrl}}"], "path": ["api", "notifications", "1"] }
+          }
+        },
+        {
+          "name": "PUT Mark Read",
+          "request": {
+            "method": "PUT",
+            "url": { "raw": "{{baseUrl}}/api/notifications/1/read", "host": ["{{baseUrl}}"], "path": ["api", "notifications", "1", "read"] }
+          }
+        },
+        {
+          "name": "DELETE Delete Notification",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/api/notifications/1", "host": ["{{baseUrl}}"], "path": ["api", "notifications", "1"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. API Gateway",
+      "item": [
+        {
+          "name": "GET Health Check",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/health", "host": ["{{baseUrl}}"], "path": ["health"] }
+          }
+        }
+      ]
+    }
+  ]
+}

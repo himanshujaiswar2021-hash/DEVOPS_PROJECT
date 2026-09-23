@@ -1,0 +1,101 @@
+name: Microservices CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  # ==========================================
+  # JOB 1: Node.js Automated Integration Tests
+  # ==========================================
+  test-node:
+    name: Unit & Integration Tests (Node 22)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Start All Microservices & Gateway
+        run: |
+          node start-all.js &
+          echo "SERVICES_PID=$!" >> $GITHUB_ENV
+
+      - name: Wait for Microservices Health
+        run: |
+          echo "Waiting for services to become healthy on port 3000..."
+          for i in {1..30}; do
+            STATUS=$(curl -s http://localhost:3000/health || echo "DOWN")
+            if echo "$STATUS" | grep -q '"overallHealth":"HEALTHY"'; then
+              echo "✓ All microservices are HEALTHY!"
+              echo "$STATUS"
+              exit 0
+            fi
+            echo "Waiting for services ($i/30)..."
+            sleep 1
+          done
+          echo "✗ Services failed to become healthy within 30 seconds"
+          curl -v http://localhost:3000/health || true
+          exit 1
+
+      - name: Run 30/30 Automated Integration Tests
+        run: npm test
+
+  # ==========================================
+  # JOB 2: Docker Build & Docker Compose Test
+  # ==========================================
+  test-docker:
+    name: Docker & Docker Compose Verification
+    runs-on: ubuntu-latest
+    needs: test-node
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Verify Single Container Docker Build
+        run: docker build -t microservices-app:latest .
+
+      - name: Start Multi-Container Cluster via Docker Compose
+        run: docker compose up --build -d
+
+      - name: Wait for Docker Compose Cluster Health
+        run: |
+          echo "Waiting for Docker Compose microservices cluster..."
+          for i in {1..40}; do
+            STATUS=$(curl -s http://localhost:3000/health || echo "DOWN")
+            if echo "$STATUS" | grep -q '"overallHealth":"HEALTHY"'; then
+              echo "✓ Docker Compose cluster is HEALTHY!"
+              echo "$STATUS"
+              exit 0
+            fi
+            echo "Waiting for cluster ($i/40)..."
+            sleep 2
+          done
+          echo "✗ Cluster failed to report HEALTHY within 80 seconds"
+          docker compose ps
+          docker compose logs
+          exit 1
+
+      - name: Run Integration Tests Against Docker Compose Cluster
+        run: |
+          docker compose exec -T api-gateway node tests/run-all-tests.js
+
+      - name: Teardown Docker Compose Cluster
+        if: always()
+        run: docker compose down -v

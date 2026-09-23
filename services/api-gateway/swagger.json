@@ -1,0 +1,445 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "SBSMA - Scalable Backend System using Microservices API",
+    "description": "Comprehensive REST API Documentation for the Scalable E-Commerce Backend System composed of 5 independent microservices.\n\n### Microservices Included:\n1. **User Service** (`:3001`)\n2. **Product Service** (`:3002`)\n3. **Order Service** (`:3003`)\n4. **Payment Service** (`:3004`)\n5. **Notification Service** (`:3005`)\n\nAll endpoints are accessible via this **API Gateway** (`:3000`).",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "API Gateway Server (Port 3000)"
+    }
+  ],
+  "tags": [
+    { "name": "Users", "description": "User Service APIs - Account management and addresses" },
+    { "name": "Products", "description": "Product Service APIs - Product catalog and inventory management" },
+    { "name": "Orders", "description": "Order Service APIs - Order placement, tracking and lifecycle" },
+    { "name": "Payments", "description": "Payment Service APIs - Payment transactions and refunds" },
+    { "name": "Notifications", "description": "Notification Service APIs - User communication and delivery alerts" }
+  ],
+  "paths": {
+    "/api/users": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get all users (Read - List)",
+        "responses": {
+          "200": { "description": "List of users retrieved successfully" },
+          "500": { "description": "Internal server error" }
+        }
+      },
+      "post": {
+        "tags": ["Users"],
+        "summary": "Create a new user (Create)",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["name", "email", "password"],
+                "properties": {
+                  "name": { "type": "string", "example": "Aarav Gupta" },
+                  "email": { "type": "string", "example": "aarav@example.com" },
+                  "password": { "type": "string", "example": "secret123" },
+                  "role": { "type": "string", "example": "customer" },
+                  "phone": { "type": "string", "example": "+91-9876500000" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "User created successfully" },
+          "400": { "description": "Missing required fields" },
+          "409": { "description": "User email already exists" }
+        }
+      }
+    },
+    "/api/users/{id}": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get user by ID with addresses (Read - Single)",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "responses": {
+          "200": { "description": "User details retrieved" },
+          "404": { "description": "User not found" }
+        }
+      },
+      "put": {
+        "tags": ["Users"],
+        "summary": "Update user details (Update)",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string", "example": "Aarav V. Gupta" },
+                  "phone": { "type": "string", "example": "+91-9876599999" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "User updated successfully" },
+          "404": { "description": "User not found" }
+        }
+      },
+      "delete": {
+        "tags": ["Users"],
+        "summary": "Delete user by ID (Delete)",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "responses": {
+          "200": { "description": "User deleted successfully" },
+          "404": { "description": "User not found" }
+        }
+      }
+    },
+    "/api/users/{id}/addresses": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get all addresses for a user",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "responses": { "200": { "description": "User addresses retrieved" } }
+      },
+      "post": {
+        "tags": ["Users"],
+        "summary": "Add new delivery address for user",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["street", "city", "state", "zip_code"],
+                "properties": {
+                  "street": { "type": "string", "example": "100 Outer Ring Road" },
+                  "city": { "type": "string", "example": "Bengaluru" },
+                  "state": { "type": "string", "example": "Karnataka" },
+                  "zip_code": { "type": "string", "example": "560103" },
+                  "country": { "type": "string", "example": "India" }
+                }
+              }
+            }
+          }
+        },
+        "responses": { "201": { "description": "Address created successfully" } }
+      }
+    },
+    "/api/products": {
+      "get": {
+        "tags": ["Products"],
+        "summary": "Get all products with optional filters (Read - List)",
+        "parameters": [
+          { "name": "search", "in": "query", "schema": { "type": "string" }, "description": "Search keyword" },
+          { "name": "category_id", "in": "query", "schema": { "type": "integer" }, "description": "Category ID filter" }
+        ],
+        "responses": { "200": { "description": "Products retrieved successfully" } }
+      },
+      "post": {
+        "tags": ["Products"],
+        "summary": "Create new product (Create)",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["name", "price", "sku"],
+                "properties": {
+                  "category_id": { "type": "integer", "example": 1 },
+                  "name": { "type": "string", "example": "Wireless Gaming Mouse" },
+                  "description": { "type": "string", "example": "RGB Ultra-lightweight optical mouse" },
+                  "price": { "type": "number", "example": 3499.00 },
+                  "stock_quantity": { "type": "integer", "example": 100 },
+                  "sku": { "type": "string", "example": "SKU-MOUSE-01" }
+                }
+              }
+            }
+          }
+        },
+        "responses": { "201": { "description": "Product created successfully" } }
+      }
+    },
+    "/api/products/{id}": {
+      "get": {
+        "tags": ["Products"],
+        "summary": "Get product by ID (Read - Single)",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "responses": {
+          "200": { "description": "Product retrieved successfully" },
+          "404": { "description": "Product not found" }
+        }
+      },
+      "put": {
+        "tags": ["Products"],
+        "summary": "Update product details (Update)",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "price": { "type": "number", "example": 3299.00 },
+                  "stock_quantity": { "type": "integer", "example": 90 }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Product updated successfully" },
+          "404": { "description": "Product not found" }
+        }
+      },
+      "delete": {
+        "tags": ["Products"],
+        "summary": "Delete product by ID (Delete)",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "responses": {
+          "200": { "description": "Product deleted successfully" },
+          "404": { "description": "Product not found" }
+        }
+      }
+    },
+    "/api/orders": {
+      "get": {
+        "tags": ["Orders"],
+        "summary": "Get all orders (Read - List)",
+        "responses": { "200": { "description": "Orders list retrieved" } }
+      },
+      "post": {
+        "tags": ["Orders"],
+        "summary": "Create new order (Create - Interacts with Product & Notification services)",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["user_id", "items", "shipping_address"],
+                "properties": {
+                  "user_id": { "type": "integer", "example": 1 },
+                  "shipping_address": { "type": "string", "example": "42 MG Road, Bengaluru, Karnataka" },
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": ["product_id", "quantity"],
+                      "properties": {
+                        "product_id": { "type": "integer", "example": 1 },
+                        "quantity": { "type": "integer", "example": 1 }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Order created and stock reserved" },
+          "400": { "description": "Insufficient stock or invalid input" },
+          "404": { "description": "Product not found" }
+        }
+      }
+    },
+    "/api/orders/{id}": {
+      "get": {
+        "tags": ["Orders"],
+        "summary": "Get order by ID with line items (Read - Single)",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "responses": {
+          "200": { "description": "Order details retrieved" },
+          "404": { "description": "Order not found" }
+        }
+      },
+      "delete": {
+        "tags": ["Orders"],
+        "summary": "Cancel and delete order (Delete - Restores reserved stock)",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "responses": {
+          "200": { "description": "Order cancelled and inventory restored" },
+          "404": { "description": "Order not found" }
+        }
+      }
+    },
+    "/api/orders/{id}/status": {
+      "put": {
+        "tags": ["Orders"],
+        "summary": "Update order status (Update)",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["status"],
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "enum": ["PENDING", "CONFIRMED", "SHIPPED", "DELIVERED", "CANCELLED"],
+                    "example": "SHIPPED"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Order status updated successfully" },
+          "400": { "description": "Invalid status value" },
+          "404": { "description": "Order not found" }
+        }
+      }
+    },
+    "/api/payments": {
+      "get": {
+        "tags": ["Payments"],
+        "summary": "Get all payment transactions (Read - List)",
+        "responses": { "200": { "description": "Payment transactions retrieved" } }
+      },
+      "post": {
+        "tags": ["Payments"],
+        "summary": "Process payment for order (Create - Confirms order & notifies user)",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["order_id", "user_id", "amount", "payment_method"],
+                "properties": {
+                  "order_id": { "type": "integer", "example": 1 },
+                  "user_id": { "type": "integer", "example": 1 },
+                  "amount": { "type": "number", "example": 119999.00 },
+                  "currency": { "type": "string", "example": "INR" },
+                  "payment_method": {
+                    "type": "string",
+                    "enum": ["CREDIT_CARD", "DEBIT_CARD", "UPI", "NET_BANKING", "CASH_ON_DELIVERY"],
+                    "example": "UPI"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Payment processed and order confirmed" },
+          "400": { "description": "Invalid payment method or missing fields" }
+        }
+      }
+    },
+    "/api/payments/{id}": {
+      "get": {
+        "tags": ["Payments"],
+        "summary": "Get payment details by ID (Read - Single)",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "responses": {
+          "200": { "description": "Payment details retrieved" },
+          "404": { "description": "Payment not found" }
+        }
+      },
+      "put": {
+        "tags": ["Payments"],
+        "summary": "Update payment details/status (Update)",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": { "type": "string", "example": "COMPLETED" },
+                  "payment_method": { "type": "string", "example": "CREDIT_CARD" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Payment updated successfully" },
+          "404": { "description": "Payment not found" }
+        }
+      },
+      "delete": {
+        "tags": ["Payments"],
+        "summary": "Cancel / Refund payment (Delete)",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "responses": {
+          "200": { "description": "Payment marked as refunded" },
+          "404": { "description": "Payment not found" }
+        }
+      }
+    },
+    "/api/notifications": {
+      "get": {
+        "tags": ["Notifications"],
+        "summary": "Get all notifications (Read - List)",
+        "responses": { "200": { "description": "Notifications retrieved" } }
+      },
+      "post": {
+        "tags": ["Notifications"],
+        "summary": "Dispatch / send notification (Create)",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["user_id", "subject", "message"],
+                "properties": {
+                  "user_id": { "type": "integer", "example": 1 },
+                  "channel": { "type": "string", "enum": ["EMAIL", "SMS", "IN_APP", "PUSH"], "example": "EMAIL" },
+                  "subject": { "type": "string", "example": "Special Weekend Offer!" },
+                  "message": { "type": "string", "example": "Get 20% off on all electronics this Sunday." }
+                }
+              }
+            }
+          }
+        },
+        "responses": { "201": { "description": "Notification dispatched successfully" } }
+      }
+    },
+    "/api/notifications/{id}": {
+      "get": {
+        "tags": ["Notifications"],
+        "summary": "Get notification by ID (Read - Single)",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "responses": {
+          "200": { "description": "Notification details retrieved" },
+          "404": { "description": "Notification not found" }
+        }
+      },
+      "delete": {
+        "tags": ["Notifications"],
+        "summary": "Delete notification (Delete)",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "responses": {
+          "200": { "description": "Notification deleted successfully" },
+          "404": { "description": "Notification not found" }
+        }
+      }
+    },
+    "/api/notifications/{id}/read": {
+      "put": {
+        "tags": ["Notifications"],
+        "summary": "Mark notification as read (Update)",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
+        "responses": {
+          "200": { "description": "Notification marked as READ" },
+          "404": { "description": "Notification not found" }
+        }
+      }
+    }
+  }
+}
